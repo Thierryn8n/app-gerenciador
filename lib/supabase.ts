@@ -1,8 +1,7 @@
 import { createClient } from "@supabase/supabase-js"
 
-// Configurações do Supabase com valores padrão
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dlpzubtissziephnesfq.supabase.co'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRscHp1YnRpc3N6aWVwaG5lc2ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NjA4ODksImV4cCI6MjA2NzIzNjg4OX0.dTsLzz7kBNCZctipSig3it5cnzmLm6zFse40Ul9MTOI'
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
