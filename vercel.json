@@ -1,13 +1,14 @@
 {
-  "buildCommand": "npm install --legacy-peer-deps && npm run build",
-  "installCommand": "npm install --legacy-peer-deps --no-frozen-lockfile",
   "framework": "nextjs",
+  "installCommand": "npm ci --legacy-peer-deps || npm install --legacy-peer-deps",
+  "buildCommand": "npm run build",
   "functions": {
     "app/api/**/*.ts": {
       "runtime": "nodejs18.x"
     }
   },
   "env": {
-    "ENABLE_EXPERIMENTAL_COREPACK": "0"
+    "ENABLE_EXPERIMENTAL_COREPACK": "0",
+    "NPM_CONFIG_PACKAGE_LOCK": "false"
   }
 }
