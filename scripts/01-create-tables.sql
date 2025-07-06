@@ -1,12 +1,12 @@
 -- Criar tabela de usuários (gestores)
 CREATE TABLE usuarios (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  id UUID PRIMARY KEY, -- ID do Supabase Auth
   email VARCHAR(255) UNIQUE NOT NULL,
-  senha_hash VARCHAR(255) NOT NULL,
   nome VARCHAR(255) NOT NULL,
   empresa VARCHAR(255),
   telefone VARCHAR(20),
   avatar_url TEXT,
+  status VARCHAR(50) DEFAULT 'ativo' CHECK (status IN ('ativo', 'inativo', 'pausado')),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

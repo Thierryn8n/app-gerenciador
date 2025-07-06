@@ -5,8 +5,21 @@ import { createContext, useContext, useEffect, useState } from "react"
 import type { User } from "@supabase/supabase-js"
 import { supabase } from "@/lib/supabase"
 
+interface Usuario {
+  id: string
+  email: string
+  nome: string
+  empresa?: string
+  telefone?: string
+  avatar_url?: string
+  status: string
+  created_at: string
+  updated_at: string
+}
+
 interface AuthContextType {
   user: User | null
+  usuario: Usuario | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<{ error: any }>
   signUp: (email: string, password: string, nome: string, empresa?: string) => Promise<{ error: any }>
@@ -17,12 +30,25 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  const [usuario, setUsuario] = useState<Usuario | null>(null)
   const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+
     // Verificar sessão atual
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setUser(session?.user ?? null)
+      if (session?.user) {
+        await fetchUsuario(session.user.id)
+      } else {
+        setUsuario(null)
+      }
       setLoading(false)
     })
 
@@ -31,11 +57,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       setUser(session?.user ?? null)
+      if (session?.user) {
+        await fetchUsuario(session.user.id)
+      } else {
+        setUsuario(null)
+      }
       setLoading(false)
     })
 
     return () => subscription.unsubscribe()
-  }, [])
+  }, [mounted])
 
   const signIn = async (email: string, password: string) => {
     try {
@@ -93,16 +124,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const fetchUsuario = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("usuarios")
+        .select("*")
+        .eq("id", userId)
+        .single()
+      
+      if (error) {
+        console.error("Erro ao buscar dados do usuário:", error)
+        setUsuario(null)
+      } else {
+        setUsuario(data)
+      }
+    } catch (error) {
+      console.error("Erro ao buscar usuário:", error)
+      setUsuario(null)
+    }
+  }
+
   const signOut = async () => {
     await supabase.auth.signOut()
+    setUsuario(null)
   }
 
   const value = {
     user,
+    usuario,
     loading,
     signIn,
     signUp,
     signOut,
+  }
+
+  if (!mounted) {
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

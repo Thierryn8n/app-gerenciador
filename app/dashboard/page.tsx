@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAuth } from "@/contexts/auth-context"
 import { supabase } from "@/lib/supabase"
+import { OnboardingWizard } from "@/components/onboarding-wizard"
 import { Users, TrendingUp, DollarSign, Target, Activity, BarChart3 } from "lucide-react"
 
 export default function DashboardPage() {
@@ -17,12 +18,59 @@ export default function DashboardPage() {
     conversoes: 0,
   })
   const [loading, setLoading] = useState(true)
+  const [showOnboarding, setShowOnboarding] = useState(false)
+  const [checkingOnboarding, setCheckingOnboarding] = useState(true)
 
   useEffect(() => {
+    console.log('🔍 Dashboard useEffect - usuario:', usuario)
     if (usuario) {
-      fetchStats()
+      console.log('✅ Usuário encontrado, verificando onboarding...')
+      checkOnboardingStatus()
+    } else {
+      console.log('❌ Usuário não encontrado')
     }
   }, [usuario])
+
+  const checkOnboardingStatus = async () => {
+    console.log('🔍 Verificando status do onboarding para usuário:', usuario?.id)
+    try {
+      // Verificar se o usuário já tem clientes
+      const { data: clientes, error } = await supabase
+        .from("clientes")
+        .select("id")
+        .eq("usuario_id", usuario?.id)
+        .limit(1)
+      
+      console.log('📊 Resultado da consulta de clientes:', { clientes, error })
+      
+      if (error) {
+        console.error("❌ Erro ao verificar clientes:", error)
+        fetchStats()
+        return
+      }
+      
+      // Se não tem clientes, mostrar onboarding
+      if (!clientes || clientes.length === 0) {
+        console.log("🎯 Usuário sem clientes - MOSTRANDO ONBOARDING")
+        setShowOnboarding(true)
+      } else {
+        console.log("✅ Usuário já tem clientes - carregando dashboard")
+        // Se tem clientes, buscar stats normalmente
+        fetchStats()
+      }
+    } catch (error) {
+      console.error("❌ Erro ao verificar status do onboarding:", error)
+      fetchStats()
+    } finally {
+      console.log('🏁 Finalizando verificação do onboarding')
+      setCheckingOnboarding(false)
+    }
+  }
+
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false)
+    fetchStats()
+  }
 
   const fetchStats = async () => {
     try {
@@ -65,7 +113,7 @@ export default function DashboardPage() {
     }
   }
 
-  if (loading) {
+  if (checkingOnboarding || loading) {
     return (
       <div className="p-6 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -82,6 +130,10 @@ export default function DashboardPage() {
         </div>
       </div>
     )
+  }
+
+  if (showOnboarding) {
+    return <OnboardingWizard onComplete={handleOnboardingComplete} />
   }
 
   return (

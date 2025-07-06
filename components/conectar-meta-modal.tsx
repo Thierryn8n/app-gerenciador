@@ -23,6 +23,15 @@ export function ConectarMetaModal({ open, onOpenChange, cliente }: ConectarMetaM
     try {
       // Configurar parâmetros do OAuth do Facebook
       const clientId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID
+      console.log('Facebook App ID:', clientId)
+      
+      if (!clientId) {
+        console.error('NEXT_PUBLIC_FACEBOOK_APP_ID não encontrado')
+        alert('Erro: Facebook App ID não configurado')
+        setLoading(false)
+        return
+      }
+      
       const redirectUri = encodeURIComponent(`${window.location.origin}/api/auth/facebook/callback`)
       const scope = encodeURIComponent("ads_management,ads_read,business_management")
       const state = encodeURIComponent(JSON.stringify({ clienteId: cliente?.id }))
