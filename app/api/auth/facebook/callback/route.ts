@@ -1,6 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { supabase } from "@/lib/supabase"
 
+// Configurações com valores padrão
+const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID || '1405602787157576'
+const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET || 'a8235b9c13118f4ff02afe36315feead'
+const NEXT_PUBLIC_APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const code = searchParams.get("code")
@@ -14,7 +19,7 @@ export async function GET(request: NextRequest) {
         window.opener.postMessage({
           type: 'FACEBOOK_AUTH_ERROR',
           error: '${error}'
-        }, '${process.env.NEXT_PUBLIC_APP_URL}');
+        }, '${NEXT_PUBLIC_APP_URL}');
         window.close();
       </script>
     `,
@@ -38,9 +43,9 @@ export async function GET(request: NextRequest) {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
-        client_id: process.env.FACEBOOK_APP_ID!,
-        client_secret: process.env.FACEBOOK_APP_SECRET!,
-        redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/facebook/callback`,
+        client_id: FACEBOOK_APP_ID,
+        client_secret: FACEBOOK_APP_SECRET,
+        redirect_uri: `${NEXT_PUBLIC_APP_URL}/api/auth/facebook/callback`,
         code: code,
       }),
     })
@@ -95,7 +100,7 @@ export async function GET(request: NextRequest) {
         window.opener.postMessage({
           type: 'FACEBOOK_AUTH_SUCCESS',
           accounts: ${JSON.stringify(accountData.data)}
-        }, '${process.env.NEXT_PUBLIC_APP_URL}');
+        }, '${NEXT_PUBLIC_APP_URL}');
         window.close();
       </script>
     `,
@@ -110,7 +115,7 @@ export async function GET(request: NextRequest) {
         window.opener.postMessage({
           type: 'FACEBOOK_AUTH_ERROR',
           error: '${error.message}'
-        }, '${process.env.NEXT_PUBLIC_APP_URL}');
+        }, '${NEXT_PUBLIC_APP_URL}');
         window.close();
       </script>
     `,

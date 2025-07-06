@@ -22,7 +22,7 @@ export function ConectarMetaModal({ open, onOpenChange, cliente }: ConectarMetaM
 
     try {
       // Configurar parâmetros do OAuth do Facebook
-      const clientId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID
+      const clientId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || '1405602787157576'
       console.log('Facebook App ID:', clientId)
       
       if (!clientId) {
