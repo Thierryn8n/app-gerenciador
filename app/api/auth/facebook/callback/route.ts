@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { supabase } from "@/lib/supabase"
 
-const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID!
-const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET!
-const NEXT_PUBLIC_APP_URL = process.env.NEXT_PUBLIC_APP_URL!
+const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID || '1405602787157576'
+const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET || 'a8235b9c13118f4ff02afe36315feead'
+const NEXT_PUBLIC_APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
