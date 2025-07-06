@@ -147,6 +147,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     await supabase.auth.signOut()
     setUsuario(null)
+    setUser(null)
+    // Redirecionar para a página de login
+    window.location.href = '/login'
   }
 
   const value = {
