@@ -1,16 +1,3 @@
-name = "app-gerenciador"
-compatibility_date = "2024-01-15"
-
-[build]
-command = "npm run build"
-
-[build.environment_variables]
-NODE_VERSION = "20"
-NPM_CONFIG_PACKAGE_LOCK = "false"
-ENABLE_EXPERIMENTAL_COREPACK = "0"
-
-[env.production]
-name = "app-gerenciador"
-
-[env.preview]
-name = "app-gerenciador-preview"
+# Configuração para Cloudflare Pages
+# Este arquivo não é necessário para deploy via Git no Cloudflare Pages
+# As configurações de build são feitas diretamente no painel do Cloudflare
