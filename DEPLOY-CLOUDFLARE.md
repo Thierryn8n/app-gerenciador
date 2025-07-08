@@ -1,15 +1,15 @@
 # Deploy no Cloudflare Pages
 
-## Configurações para Deploy via Git
+## Configurações de Build no Cloudflare Pages
 
-Quando você conectar este repositório ao Cloudflare Pages, use as seguintes configurações:
+Quando configurar o projeto no Cloudflare Pages, use as seguintes configurações:
 
 ### Build Settings
 - **Framework preset**: Next.js
 - **Build command**: `npm run build`
 - **Build output directory**: `.next`
-- **Root directory**: `/` (deixe em branco)
 - **Node.js version**: `20.x`
+- **Root directory**: `/` (deixe em branco se for a raiz do repositório)
 
 ### Environment Variables
 Adicione as seguintes variáveis de ambiente no painel do Cloudflare Pages:
