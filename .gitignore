@@ -6,6 +6,7 @@
 # next.js
 /.next/
 /out/
+/cache/
 
 # production
 /build
@@ -25,3 +26,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# cache directories
+cache/
+.cache/
+.swc/
+.turbo/
+
+# temporary files
+.tmp/
+temp/
