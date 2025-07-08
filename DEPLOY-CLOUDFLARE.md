@@ -12,6 +12,13 @@ Quando configurar o projeto no Cloudflare Pages, use as seguintes configuraçõe
 - **Root directory**: `/` (deixe em branco se for a raiz do repositório)
 
 ### Environment Variables
+
+Configure as seguintes variáveis de ambiente no painel do Cloudflare Pages:
+
+**Configurações do Wrangler:**
+- `WRANGLER_SEND_METRICS` = `false`
+
+**Configurações do Supabase:**
 Adicione as seguintes variáveis de ambiente no painel do Cloudflare Pages:
 
 ```
@@ -38,6 +45,13 @@ POSTGRES_DATABASE=postgres
 
 # URL da aplicação (ajuste para seu domínio)
 NEXT_PUBLIC_APP_URL=https://seu-dominio.pages.dev
+
+## Notas Importantes
+
+- **NÃO** use `wrangler deploy` para este projeto - ele é configurado para deploy via Git
+- **NÃO** adicione arquivo `wrangler.toml` - isso causará conflitos
+- O projeto está configurado para Cloudflare Pages, não Workers
+- Use apenas a integração Git no painel do Cloudflare Pages
 ```
 
 ### Passos para Deploy

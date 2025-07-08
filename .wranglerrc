@@ -1,0 +1,2 @@
+# Configuração do Wrangler para evitar conflitos
+send_metrics=false
