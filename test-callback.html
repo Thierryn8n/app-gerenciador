@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Facebook Callback</title>
+</head>
+<body>
+    <h1>Testando Callback do Facebook</h1>
+    <p>Esta página deve fechar automaticamente após o login.</p>
+    
+    <script>
+        console.log('Test callback page loaded');
+        console.log('URL:', window.location.href);
+        console.log('Search params:', window.location.search);
+        
+        // Simular o que o callback real faz
+        if (window.opener) {
+            console.log('Window opener found, sending test message');
+            window.opener.postMessage({
+                type: 'FACEBOOK_AUTH_SUCCESS',
+                accounts: [{ id: 'test', name: 'Test Account' }]
+            }, window.location.origin);
+            
+            setTimeout(() => {
+                console.log('Closing window');
+                window.close();
+            }, 2000);
+        } else {
+            console.log('No window opener found');
+        }
+    </script>
+</body>
+</html>

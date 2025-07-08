@@ -11,14 +11,20 @@ export async function GET(request: NextRequest) {
   const state = searchParams.get("state")
   const error = searchParams.get("error")
 
+  console.log('Facebook callback received:', { code: !!code, state, error })
+
   if (error) {
+    console.error('Facebook OAuth error:', error)
     return new NextResponse(
       `
       <script>
-        window.opener.postMessage({
-          type: 'FACEBOOK_AUTH_ERROR',
-          error: '${error}'
-        }, '${NEXT_PUBLIC_APP_URL}');
+        console.log('Sending error message to parent');
+        if (window.opener) {
+          window.opener.postMessage({
+            type: 'FACEBOOK_AUTH_ERROR',
+            error: '${error}'
+          }, '${NEXT_PUBLIC_APP_URL}');
+        }
         window.close();
       </script>
     `,
@@ -29,13 +35,33 @@ export async function GET(request: NextRequest) {
   }
 
   if (!code || !state) {
-    return new NextResponse("Parâmetros inválidos", { status: 400 })
+    console.error('Missing required parameters:', { code: !!code, state: !!state })
+    return new NextResponse(
+      `
+      <script>
+        console.log('Missing parameters, sending error to parent');
+        if (window.opener) {
+          window.opener.postMessage({
+            type: 'FACEBOOK_AUTH_ERROR',
+            error: 'Parâmetros inválidos'
+          }, '${NEXT_PUBLIC_APP_URL}');
+        }
+        window.close();
+      </script>
+    `,
+      {
+        headers: { "Content-Type": "text/html" },
+      },
+    )
   }
 
   try {
+    console.log('Parsing state:', state)
     const { clienteId } = JSON.parse(decodeURIComponent(state))
+    console.log('Cliente ID:', clienteId)
 
     // Trocar código por access token
+    console.log('Exchanging code for access token...')
     const tokenResponse = await fetch(`https://graph.facebook.com/v18.0/oauth/access_token`, {
       method: "POST",
       headers: {
@@ -50,8 +76,10 @@ export async function GET(request: NextRequest) {
     })
 
     const tokenData = await tokenResponse.json()
+    console.log('Token response:', { success: !tokenData.error, hasToken: !!tokenData.access_token })
 
     if (tokenData.error) {
+      console.error('Token exchange error:', tokenData.error)
       throw new Error(tokenData.error.message)
     }
 
@@ -93,14 +121,20 @@ export async function GET(request: NextRequest) {
       if (tokenError) throw tokenError
     }
 
+    console.log('Authentication successful, sending success message')
     return new NextResponse(
       `
       <script>
-        window.opener.postMessage({
-          type: 'FACEBOOK_AUTH_SUCCESS',
-          accounts: ${JSON.stringify(accountData.data)}
-        }, '${NEXT_PUBLIC_APP_URL}');
-        window.close();
+        console.log('Sending success message to parent');
+        if (window.opener) {
+          window.opener.postMessage({
+            type: 'FACEBOOK_AUTH_SUCCESS',
+            accounts: ${JSON.stringify(accountData.data)}
+          }, '${NEXT_PUBLIC_APP_URL}');
+        }
+        setTimeout(() => {
+          window.close();
+        }, 1000);
       </script>
     `,
       {
@@ -108,14 +142,20 @@ export async function GET(request: NextRequest) {
       },
     )
   } catch (error: any) {
+    console.error('Facebook authentication error:', error)
     return new NextResponse(
       `
       <script>
-        window.opener.postMessage({
-          type: 'FACEBOOK_AUTH_ERROR',
-          error: '${error.message}'
-        }, '${NEXT_PUBLIC_APP_URL}');
-        window.close();
+        console.log('Sending error message to parent:', '${error.message}');
+        if (window.opener) {
+          window.opener.postMessage({
+            type: 'FACEBOOK_AUTH_ERROR',
+            error: '${error.message}'
+          }, '${NEXT_PUBLIC_APP_URL}');
+        }
+        setTimeout(() => {
+          window.close();
+        }, 1000);
       </script>
     `,
       {
