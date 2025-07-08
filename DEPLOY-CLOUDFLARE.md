@@ -46,12 +46,34 @@ POSTGRES_DATABASE=postgres
 # URL da aplicação (ajuste para seu domínio)
 NEXT_PUBLIC_APP_URL=https://seu-dominio.pages.dev
 
+## Resolução do Erro de Deploy
+
+### Se você está vendo o erro "If are uploading a directory of assets..."
+
+Este erro indica que o Cloudflare está tentando fazer deploy como **Worker** em vez de **Pages**. Para resolver:
+
+1. **Verifique se você está no painel correto:**
+   - Acesse: `https://dash.cloudflare.com/` → **Workers & Pages**
+   - Certifique-se de estar na aba **"Pages"** (não "Workers")
+
+2. **Se o projeto foi criado como Worker por engano:**
+   - Delete o projeto Worker existente
+   - Crie um novo projeto na aba **"Pages"**
+   - Use **"Connect to Git"** para conectar seu repositório
+
+3. **Configurações corretas para Pages:**
+   - **Framework preset**: Next.js
+   - **Build command**: `npm run build`
+   - **Build output directory**: `.next`
+   - **Root directory**: `/` (deixe em branco)
+
 ## Notas Importantes
 
 - **NÃO** use `wrangler deploy` para este projeto - ele é configurado para deploy via Git
 - **NÃO** adicione arquivo `wrangler.toml` - isso causará conflitos
-- O projeto está configurado para Cloudflare Pages, não Workers
-- Use apenas a integração Git no painel do Cloudflare Pages
+- O projeto está configurado para **Cloudflare Pages**, não Workers
+- Use apenas a integração Git no painel do **Cloudflare Pages**
+- Se o erro persistir, delete o projeto e recrie como **Pages** (não Worker)
 ```
 
 ### Passos para Deploy
