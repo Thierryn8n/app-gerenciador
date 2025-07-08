@@ -92,7 +92,7 @@ export default function TermosServicoPage() {
           <section>
             <h2 className="text-xl font-semibold text-white mb-3">10. Contato</h2>
             <p>
-              Para questões sobre estes termos, entre em contato: suporte@seudominio.com
+              Para questões sobre estes termos, entre em contato: suporte@trafficmanager.com
             </p>
           </section>
 

@@ -82,7 +82,7 @@ export default function PoliticaPrivacidadePage() {
           <section>
             <h2 className="text-xl font-semibold text-white mb-3">8. Contato</h2>
             <p>
-              Para questões sobre esta política de privacidade, entre em contato conosco através do email: privacidade@seudominio.com
+              Para questões sobre esta política de privacidade, entre em contato conosco através do email: privacidade@trafficmanager.com
             </p>
           </section>
 

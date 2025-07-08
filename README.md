@@ -19,7 +19,7 @@ NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_chave_anonima
 FACEBOOK_APP_ID=seu_app_id_facebook
 FACEBOOK_APP_SECRET=seu_app_secret_facebook
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_URL=https://app-gerenciador-three.vercel.app
 ```
 
 ### Passo 2: Corrigir Estrutura do Banco de Dados
@@ -39,7 +39,7 @@ npm run dev
 pnpm dev
 ```
 
-2. Acesse http://localhost:3000/register
+2. Acesse https://app-gerenciador-three.vercel.app/register
 3. Tente criar uma nova conta
 
 ## 📋 Funcionalidades

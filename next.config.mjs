@@ -8,6 +8,7 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+    domains: ['localhost'],
   },
   webpack: (config, { isServer }) => {
     // Desabilita cache do webpack para evitar arquivos grandes no Cloudflare Pages
