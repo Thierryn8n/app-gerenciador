@@ -1,0 +1,6 @@
+# Cloudflare Pages redirects
+# Redireciona a raiz para a página de login
+/  /login  302
+
+# Fallback para SPA (Single Page Application)
+/*  /index.html  200
