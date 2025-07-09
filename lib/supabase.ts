@@ -203,3 +203,63 @@ export interface ConfiguracaoCobranca {
   created_at: string
   updated_at: string
 }
+
+// Interfaces para Google Analytics
+export interface ContaAnalytics {
+  id: string
+  cliente_id: string
+  account_id: string
+  property_id: string
+  data_stream_id?: string
+  nome_conta: string
+  nome_propriedade: string
+  url_site?: string
+  status: "ativa" | "inativa" | "erro"
+  created_at: string
+  updated_at: string
+}
+
+export interface TokenGoogleAnalytics {
+  id: string
+  conta_analytics_id: string
+  access_token: string
+  refresh_token: string
+  token_type: string
+  expires_at?: string
+  scope?: string
+  created_at: string
+  updated_at: string
+}
+
+export interface MetricaAnalytics {
+  id: string
+  conta_analytics_id: string
+  data_referencia: string
+  sessoes: number
+  usuarios: number
+  novos_usuarios: number
+  visualizacoes_pagina: number
+  taxa_rejeicao: number
+  duracao_sessao_media: number
+  conversoes: number
+  taxa_conversao: number
+  receita: number
+  origem_trafego?: any
+  paginas_populares?: any
+  dispositivos?: any
+  localizacao?: any
+  created_at: string
+  updated_at: string
+}
+
+export interface ObjetivoAnalytics {
+  id: string
+  conta_analytics_id: string
+  objetivo_id: string
+  nome: string
+  tipo: string
+  valor?: number
+  ativo: boolean
+  created_at: string
+  updated_at: string
+}

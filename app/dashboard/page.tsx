@@ -1,11 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { useAuth } from "@/contexts/auth-context"
 import { supabase } from "@/lib/supabase"
 import { OnboardingWizard } from "@/components/onboarding-wizard"
-import { Users, TrendingUp, DollarSign, Target, Activity, BarChart3 } from "lucide-react"
+import { Users, TrendingUp, DollarSign, Target, Activity, BarChart3, Globe, ArrowRight } from "lucide-react"
 
 export default function DashboardPage() {
   const { usuario } = useAuth()
@@ -16,6 +18,8 @@ export default function DashboardPage() {
     campanhasAtivas: 0,
     gastoTotal: 0,
     conversoes: 0,
+    contasAnalytics: 0,
+    sessoesMes: 0,
   })
   const [loading, setLoading] = useState(true)
   const [showOnboarding, setShowOnboarding] = useState(false)
@@ -98,6 +102,27 @@ export default function DashboardPage() {
       const campanhasAtivas = campanhas?.length || 0
       const gastoTotal = campanhas?.reduce((sum, c) => sum + (c.valor_gasto || 0), 0) || 0
 
+      // Buscar contas do Google Analytics
+      const { data: contasAnalytics } = await supabase
+        .from("contas_analytics")
+        .select("*")
+        .in("cliente_id", clientes?.map((c) => c.id) || [])
+        .eq("status", "ativa")
+
+      const contasAnalyticsCount = contasAnalytics?.length || 0
+
+      // Buscar métricas recentes do Analytics (últimos 30 dias)
+      const thirtyDaysAgo = new Date()
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+      
+      const { data: metricas } = await supabase
+        .from("metricas_analytics")
+        .select("sessoes")
+        .in("conta_analytics_id", contasAnalytics?.map((c) => c.id) || [])
+        .gte("data_referencia", thirtyDaysAgo.toISOString().split('T')[0])
+
+      const sessoesMes = metricas?.reduce((sum, m) => sum + (m.sessoes || 0), 0) || 0
+
       setStats({
         totalClientes,
         clientesAtivos,
@@ -105,6 +130,8 @@ export default function DashboardPage() {
         campanhasAtivas,
         gastoTotal,
         conversoes: Math.floor(gastoTotal * 0.05), // Simulado
+        contasAnalytics: contasAnalyticsCount,
+        sessoesMes,
       })
     } catch (error) {
       console.error("Erro ao buscar estatísticas:", error)
@@ -211,6 +238,67 @@ export default function DashboardPage() {
           <CardContent>
             <div className="text-3xl font-bold text-white font-mono">94.2%</div>
             <p className="text-xs text-neutral-500 mt-1">Taxa de sucesso</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Google Analytics Section */}
+      <div className="mb-8">
+        <Card className="bg-gradient-to-r from-blue-900/20 to-blue-800/20 border-blue-500/30 hover:border-blue-400/50 transition-colors">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-500/20 rounded-lg">
+                  <Globe className="h-6 w-6 text-blue-400" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg font-bold text-white tracking-wider">GOOGLE ANALYTICS</CardTitle>
+                  <p className="text-sm text-blue-300">Métricas de websites dos clientes</p>
+                </div>
+              </div>
+              <Link href="/analytics">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                  Acessar Analytics
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-blue-900/30 p-4 rounded-lg">
+                <div className="flex items-center gap-2 text-blue-300 mb-2">
+                  <TrendingUp className="w-4 h-4" />
+                  <span className="text-sm font-medium">Contas Conectadas</span>
+                </div>
+                <p className="text-2xl font-bold text-white">{stats.contasAnalytics}</p>
+                <p className="text-xs text-blue-400">Propriedades GA4</p>
+              </div>
+              
+              <div className="bg-blue-900/30 p-4 rounded-lg">
+                <div className="flex items-center gap-2 text-blue-300 mb-2">
+                  <Users className="w-4 h-4" />
+                  <span className="text-sm font-medium">Sessões (30d)</span>
+                </div>
+                <p className="text-2xl font-bold text-white">
+                  {stats.sessoesMes.toLocaleString('pt-BR')}
+                </p>
+                <p className="text-xs text-blue-400">Últimos 30 dias</p>
+              </div>
+              
+              <div className="bg-blue-900/30 p-4 rounded-lg">
+                <div className="flex items-center gap-2 text-blue-300 mb-2">
+                  <BarChart3 className="w-4 h-4" />
+                  <span className="text-sm font-medium">Status</span>
+                </div>
+                <p className="text-2xl font-bold text-white">
+                  {stats.contasAnalytics > 0 ? 'Ativo' : 'Inativo'}
+                </p>
+                <p className="text-xs text-blue-400">
+                  {stats.contasAnalytics > 0 ? 'Coletando dados' : 'Conecte uma conta'}
+                </p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

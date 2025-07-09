@@ -7,9 +7,10 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/contexts/auth-context"
 import { supabase, type Cliente } from "@/lib/supabase"
-import { Plus, Search, Users, TrendingUp, Eye, Settings, MapPin, Clock, Facebook, BarChart3 } from "lucide-react"
+import { Plus, Search, Users, TrendingUp, Eye, Settings, MapPin, Clock, Facebook, BarChart3, Globe } from "lucide-react"
 import { AdicionarClienteModal } from "@/components/adicionar-cliente-modal"
 import { ConectarMetaModal } from "@/components/conectar-meta-modal"
+import { ConectarGoogleAnalyticsModal } from "@/components/conectar-google-analytics-modal"
 import { useRouter } from "next/navigation"
 
 export default function ClientesPage() {
@@ -19,6 +20,7 @@ export default function ClientesPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [showAdicionarCliente, setShowAdicionarCliente] = useState(false)
   const [showConectarMeta, setShowConectarMeta] = useState(false)
+  const [showConectarAnalytics, setShowConectarAnalytics] = useState(false)
   const [clienteSelecionado, setClienteSelecionado] = useState<Cliente | null>(null)
   const router = useRouter()
 
@@ -68,6 +70,11 @@ export default function ClientesPage() {
   const handleConectarMeta = (cliente: Cliente) => {
     setClienteSelecionado(cliente)
     setShowConectarMeta(true)
+  }
+
+  const handleConectarAnalytics = (cliente: Cliente) => {
+    setClienteSelecionado(cliente)
+    setShowConectarAnalytics(true)
   }
 
   if (loading) {
@@ -187,63 +194,106 @@ export default function ClientesPage() {
           {filteredClientes.map((cliente) => (
             <Card
               key={cliente.id}
-              className="bg-neutral-800 border-neutral-700 hover:border-orange-500/50 transition-colors"
+              className="bg-neutral-800 border-neutral-700 hover:border-orange-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/10"
             >
-              <CardHeader className="pb-3">
+              <CardHeader className="pb-4">
                 <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-lg text-white">{cliente.nome}</CardTitle>
+                  <div className="flex-1">
+                    <CardTitle className="text-lg text-white mb-1 tracking-wide">{cliente.nome}</CardTitle>
                     <p className="text-sm text-neutral-400">{cliente.email}</p>
+                    {cliente.empresa && (
+                      <div className="flex items-center gap-2 mt-2">
+                        <MapPin className="w-3 h-3 text-neutral-500" />
+                        <span className="text-xs text-neutral-400">{cliente.empresa}</span>
+                      </div>
+                    )}
                   </div>
                   <Badge className={getStatusColor(cliente.status)}>{cliente.status.toUpperCase()}</Badge>
                 </div>
               </CardHeader>
+              
               <CardContent className="space-y-4">
-                {cliente.empresa && (
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-neutral-500" />
-                    <span className="text-sm text-neutral-300">{cliente.empresa}</span>
+                {/* Informações do Cliente */}
+                <div className="bg-neutral-900/50 rounded-lg p-3 border border-neutral-700/50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Clock className="w-4 h-4 text-neutral-500" />
+                    <span className="text-xs text-neutral-400 tracking-wider">CRIADO EM</span>
                   </div>
-                )}
-
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-neutral-500" />
-                  <span className="text-sm text-neutral-300">
-                    Criado em {new Date(cliente.created_at).toLocaleDateString("pt-BR")}
-                  </span>
+                  <p className="text-sm text-neutral-300 font-mono">
+                    {new Date(cliente.created_at).toLocaleDateString("pt-BR")}
+                  </p>
                 </div>
 
-                <div className="flex gap-2 pt-2">
+                {/* Seção de Métricas */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <BarChart3 className="w-4 h-4 text-orange-500" />
+                    <span className="text-xs text-neutral-400 tracking-wider font-medium">ANÁLISES</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      size="sm"
+                      onClick={() => router.push(`/clientes/${cliente.id}/metricas`)}
+                      className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-xs"
+                    >
+                      <Facebook className="w-3 h-3 mr-1" />
+                      Meta Ads
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() => router.push(`/clientes/${cliente.id}/analytics`)}
+                      className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-xs"
+                    >
+                      <Globe className="w-3 h-3 mr-1" />
+                      Analytics
+                    </Button>
+                  </div>
+                </div>
+                
+                {/* Seção de Conexões */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Settings className="w-4 h-4 text-blue-500" />
+                    <span className="text-xs text-neutral-400 tracking-wider font-medium">CONEXÕES</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      size="sm"
+                      onClick={() => handleConectarMeta(cliente)}
+                      variant="outline"
+                      className="border-blue-600/50 text-blue-400 hover:bg-blue-600/10 hover:border-blue-500 text-xs"
+                    >
+                      <Facebook className="w-3 h-3 mr-1" />
+                      Meta
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() => handleConectarAnalytics(cliente)}
+                      variant="outline"
+                      className="border-green-600/50 text-green-400 hover:bg-green-600/10 hover:border-green-500 text-xs"
+                    >
+                      <Globe className="w-3 h-3 mr-1" />
+                      Google
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Ações Rápidas */}
+                <div className="flex gap-2 pt-2 border-t border-neutral-700/50">
                   <Button
                     size="sm"
-                    onClick={() => router.push(`/clientes/${cliente.id}/metricas`)}
-                    className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                    variant="outline"
+                    className="flex-1 border-neutral-600 text-neutral-300 hover:bg-neutral-700 bg-transparent text-xs"
                   >
-                    <BarChart3 className="w-4 h-4 mr-1" />
-                    Métricas
-                  </Button>
-                  <Button
-                    size="sm"
-                    onClick={() => handleConectarMeta(cliente)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    <Facebook className="w-4 h-4 mr-1" />
-                    Meta
+                    <Eye className="w-3 h-3 mr-1" />
+                    Visualizar
                   </Button>
                   <Button
                     size="sm"
                     variant="outline"
                     className="border-neutral-600 text-neutral-300 hover:bg-neutral-700 bg-transparent"
                   >
-                    <Eye className="w-4 h-4 mr-1" />
-                    Ver
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="border-neutral-600 text-neutral-300 hover:bg-neutral-700 bg-transparent"
-                  >
-                    <Settings className="w-4 h-4" />
+                    <Settings className="w-3 h-3" />
                   </Button>
                 </div>
               </CardContent>
@@ -260,6 +310,12 @@ export default function ClientesPage() {
       />
 
       <ConectarMetaModal open={showConectarMeta} onOpenChange={setShowConectarMeta} cliente={clienteSelecionado} />
+
+      <ConectarGoogleAnalyticsModal
+        open={showConectarAnalytics}
+        onOpenChange={setShowConectarAnalytics}
+        cliente={clienteSelecionado}
+      />
     </div>
   )
 }

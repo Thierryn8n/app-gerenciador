@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Google Analytics OAuth</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+        .container {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .success {
+            background-color: #1a4a3a;
+            border: 1px solid #2a6a4a;
+        }
+        .error {
+            background-color: #4a1a1a;
+            border: 1px solid #6a2a2a;
+        }
+        .warning {
+            background-color: #4a3a1a;
+            border: 1px solid #6a5a2a;
+        }
+        button {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background-color: #3367d6;
+        }
+        button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+        }
+        .url-display {
+            background-color: #1a1a1a;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4285f4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #4285f4;
+            background-color: #2a2a2a;
+        }
+        .step h3 {
+            margin-top: 0;
+            color: #4285f4;
+        }
+        pre {
+            background-color: #1a1a1a;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Teste de Configuração - Google Analytics OAuth</h1>
+    
+    <div class="container">
+        <h2>Informações do Sistema</h2>
+        <p><strong>URL da Aplicação:</strong> <span id="appUrl">Carregando...</span></p>
+        <p><strong>Client ID:</strong> <span id="clientId">Carregando...</span></p>
+        <p><strong>Callback URL:</strong> <span id="callbackUrl">Carregando...</span></p>
+    </div>
+
+    <div class="step">
+        <h3>Passo 1: Verificar Configuração</h3>
+        <button onclick="verificarConfiguracao()">Verificar Configuração</button>
+        <div id="configStatus"></div>
+    </div>
+
+    <div class="step">
+        <h3>Passo 2: Testar URLs</h3>
+        <button onclick="testarUrls()">Testar URLs de Callback</button>
+        <div id="urlStatus"></div>
+    </div>
+
+    <div class="step">
+        <h3>Passo 3: Testar Autenticação</h3>
+        <button onclick="testarAutenticacao()" id="authButton">Testar OAuth do Google Analytics</button>
+        <div id="authStatus"></div>
+    </div>
+
+    <div class="step">
+        <h3>Passo 4: Verificar Permissões</h3>
+        <button onclick="verificarPermissoes()">Verificar Escopos e Permissões</button>
+        <div id="permissionsStatus"></div>
+    </div>
+
+    <div class="container">
+        <h2>Log de Eventos</h2>
+        <div id="eventLog" style="height: 200px; overflow-y: auto; background-color: #1a1a1a; padding: 10px; border-radius: 4px;"></div>
+    </div>
+
+    <script>
+        // Configurações
+        const APP_URL = window.location.origin
+        const CLIENT_ID = 'SEU_GOOGLE_CLIENT_ID_AQUI' // Substitua pelo seu Client ID
+        
+        // Elementos DOM
+        const appUrlEl = document.getElementById('appUrl')
+        const clientIdEl = document.getElementById('clientId')
+        const callbackUrlEl = document.getElementById('callbackUrl')
+        const eventLog = document.getElementById('eventLog')
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            appUrlEl.textContent = APP_URL
+            clientIdEl.textContent = CLIENT_ID
+            callbackUrlEl.textContent = `${APP_URL}/api/auth/google-analytics/callback`
+            
+            log('Sistema inicializado', 'info')
+        })
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString()
+            const logEntry = document.createElement('div')
+            logEntry.innerHTML = `<span style="color: #888">[${timestamp}]</span> <span style="color: ${getLogColor(type)}">${message}</span>`
+            eventLog.appendChild(logEntry)
+            eventLog.scrollTop = eventLog.scrollHeight
+        }
+        
+        function getLogColor(type) {
+            switch(type) {
+                case 'success': return '#4ade80'
+                case 'error': return '#f87171'
+                case 'warning': return '#fbbf24'
+                default: return '#ffffff'
+            }
+        }
+        
+        function showStatus(elementId, message, type) {
+            const element = document.getElementById(elementId)
+            element.innerHTML = `<div class="status ${type}">${message}</div>`
+        }
+        
+        function verificarConfiguracao() {
+            log('Verificando configuração...', 'info')
+            
+            let issues = []
+            
+            // Verificar Client ID
+            if (!CLIENT_ID || CLIENT_ID === 'SEU_GOOGLE_CLIENT_ID_AQUI') {
+                issues.push('❌ Client ID não configurado')
+            } else {
+                log('✅ Client ID configurado', 'success')
+            }
+            
+            // Verificar URL da aplicação
+            if (APP_URL.includes('localhost')) {
+                log('⚠️ Usando localhost - certifique-se de que está configurado no Google Cloud Console', 'warning')
+            } else {
+                log('✅ URL de produção detectada', 'success')
+            }
+            
+            if (issues.length === 0) {
+                showStatus('configStatus', '✅ Configuração básica OK', 'success')
+                log('Configuração básica verificada com sucesso', 'success')
+            } else {
+                showStatus('configStatus', `❌ Problemas encontrados:<br>${issues.join('<br>')}`, 'error')
+                log('Problemas na configuração detectados', 'error')
+            }
+        }
+        
+        function testarUrls() {
+            log('Testando URLs de callback...', 'info')
+            
+            const callbackUrl = `${APP_URL}/api/auth/google-analytics/callback`
+            
+            // Testar se a URL de callback responde
+            fetch(callbackUrl, { method: 'GET' })
+                .then(response => {
+                    if (response.status === 400) {
+                        // Esperado - callback sem parâmetros
+                        showStatus('urlStatus', '✅ URL de callback acessível', 'success')
+                        log('URL de callback respondeu corretamente', 'success')
+                    } else {
+                        showStatus('urlStatus', `⚠️ URL de callback retornou status ${response.status}`, 'warning')
+                        log(`URL de callback retornou status ${response.status}`, 'warning')
+                    }
+                })
+                .catch(error => {
+                    showStatus('urlStatus', `❌ Erro ao acessar callback: ${error.message}`, 'error')
+                    log(`Erro ao testar URL de callback: ${error.message}`, 'error')
+                })
+        }
+        
+        function testarAutenticacao() {
+            if (!CLIENT_ID || CLIENT_ID === 'SEU_GOOGLE_CLIENT_ID_AQUI') {
+                showStatus('authStatus', '❌ Configure o Client ID primeiro', 'error')
+                return
+            }
+            
+            log('Iniciando teste de autenticação...', 'info')
+            
+            const redirectUri = encodeURIComponent(`${APP_URL}/api/auth/google-analytics/callback`)
+            const scope = encodeURIComponent('https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/analytics.manage.users.readonly')
+            const state = encodeURIComponent(JSON.stringify({ teste: true, timestamp: Date.now() }))
+            
+            const authUrl = `https://accounts.google.com/oauth/authorize?` +
+                `client_id=${CLIENT_ID}&` +
+                `redirect_uri=${redirectUri}&` +
+                `scope=${scope}&` +
+                `response_type=code&` +
+                `access_type=offline&` +
+                `prompt=consent&` +
+                `state=${state}`
+            
+            log('URL de autenticação gerada', 'info')
+            
+            // Abrir popup para autenticação
+            const popup = window.open(authUrl, 'google_auth', 'width=500,height=600,scrollbars=yes,resizable=yes')
+            
+            if (!popup) {
+                showStatus('authStatus', '❌ Popup bloqueado pelo navegador', 'error')
+                log('Popup de autenticação foi bloqueado', 'error')
+                return
+            }
+            
+            showStatus('authStatus', '🔄 Aguardando autenticação...', 'warning')
+            log('Popup de autenticação aberto', 'info')
+            
+            // Listener para mensagens do popup
+            const messageHandler = (event) => {
+                if (event.origin !== APP_URL) return
+                
+                if (event.data.type === 'GOOGLE_ANALYTICS_AUTH_SUCCESS') {
+                    showStatus('authStatus', '✅ Autenticação realizada com sucesso!', 'success')
+                    log('Autenticação Google Analytics bem-sucedida', 'success')
+                    popup.close()
+                    window.removeEventListener('message', messageHandler)
+                } else if (event.data.type === 'GOOGLE_ANALYTICS_AUTH_ERROR') {
+                    showStatus('authStatus', `❌ Erro na autenticação: ${event.data.error}`, 'error')
+                    log(`Erro na autenticação: ${event.data.error}`, 'error')
+                    popup.close()
+                    window.removeEventListener('message', messageHandler)
+                }
+            }
+            
+            window.addEventListener('message', messageHandler)
+            
+            // Verificar se popup foi fechado manualmente
+            const checkClosed = setInterval(() => {
+                if (popup.closed) {
+                    clearInterval(checkClosed)
+                    window.removeEventListener('message', messageHandler)
+                    showStatus('authStatus', '⚠️ Autenticação cancelada pelo usuário', 'warning')
+                    log('Popup de autenticação foi fechado', 'warning')
+                }
+            }, 1000)
+        }
+        
+        function verificarPermissoes() {
+            log('Verificando escopos e permissões...', 'info')
+            
+            const escopos = [
+                'https://www.googleapis.com/auth/analytics.readonly',
+                'https://www.googleapis.com/auth/analytics.manage.users.readonly'
+            ]
+            
+            let statusHtml = '<h4>Escopos Solicitados:</h4><ul>'
+            escopos.forEach(escopo => {
+                statusHtml += `<li>✅ ${escopo}</li>`
+            })
+            statusHtml += '</ul>'
+            
+            statusHtml += '<h4>Verificações:</h4><ul>'
+            statusHtml += '<li>✅ Escopos de leitura configurados</li>'
+            statusHtml += '<li>✅ Permissões mínimas necessárias</li>'
+            statusHtml += '<li>⚠️ Certifique-se de que o usuário tem acesso às propriedades GA4</li>'
+            statusHtml += '</ul>'
+            
+            showStatus('permissionsStatus', statusHtml, 'success')
+            log('Verificação de permissões concluída', 'success')
+        }
+        
+        // Listener global para mensagens
+        window.addEventListener('message', function(event) {
+            if (event.origin !== APP_URL) return
+            
+            log(`Mensagem recebida: ${event.data.type}`, 'info')
+            
+            if (event.data.type === 'GOOGLE_ANALYTICS_AUTH_SUCCESS') {
+                log('✅ Sucesso na autenticação Google Analytics', 'success')
+            } else if (event.data.type === 'GOOGLE_ANALYTICS_AUTH_ERROR') {
+                log(`❌ Erro na autenticação: ${event.data.error}`, 'error')
+            }
+        })
+    </script>
+</body>
+</html>

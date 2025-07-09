@@ -4,13 +4,14 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
-import { BarChart3, Users, FileText, Settings, LogOut, Target, History, Zap, Menu, X } from "lucide-react"
+import { BarChart3, Users, FileText, Settings, LogOut, Target, History, Zap, Menu, X, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
   { name: "Clientes", href: "/clientes", icon: Users },
   { name: "Campanhas", href: "/campanhas", icon: Target },
+  { name: "Analytics", href: "/analytics", icon: TrendingUp },
   { name: "Relatórios", href: "/relatorios", icon: FileText },
   { name: "Histórico", href: "/historico", icon: History },
   { name: "Sistema", href: "/sistema", icon: Settings },
