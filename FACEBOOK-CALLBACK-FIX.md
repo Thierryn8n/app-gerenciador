@@ -27,7 +27,7 @@ Você precisa configurar as seguintes URLs no Facebook Developers Console:
 
 Na seção **Domínios do App**, adicione:
 ```
-app-gerenciador-beta.vercel.app
+app-gerenciador-pi.vercel.app
 ```
 
 ### 3. Configure o Facebook Login
@@ -36,7 +36,7 @@ app-gerenciador-beta.vercel.app
 
 **Para Produção:**
 ```
-https://app-gerenciador-beta.vercel.app/api/auth/facebook/callback
+https://app-gerenciador-pi.vercel.app/api/auth/facebook/callback
 ```
 
 **Para Desenvolvimento Local (se necessário):**
@@ -48,7 +48,7 @@ http://localhost:3000/api/auth/facebook/callback
 
 O arquivo `.env.local` está configurado com:
 ```
-NEXT_PUBLIC_APP_URL=https://app-gerenciador-beta.vercel.app
+NEXT_PUBLIC_APP_URL=https://app-gerenciador-pi.vercel.app
 ```
 
 ## Como Testar
@@ -63,7 +63,7 @@ NEXT_PUBLIC_APP_URL=https://app-gerenciador-beta.vercel.app
 No console do navegador, você deve ver:
 ```
 Facebook App ID: [seu-app-id]
-Redirect URI: https://app-gerenciador-beta.vercel.app/api/auth/facebook/callback
+Redirect URI: https://app-gerenciador-pi.vercel.app/api/auth/facebook/callback
 ```
 
 ## Se o Problema Persistir
@@ -81,8 +81,8 @@ Redirect URI: https://app-gerenciador-beta.vercel.app/api/auth/facebook/callback
 
 ## URLs que Devem Ser Idênticas
 
-✅ **Modal**: `https://app-gerenciador-beta.vercel.app/api/auth/facebook/callback`
-✅ **Callback**: `https://app-gerenciador-beta.vercel.app/api/auth/facebook/callback`
-✅ **Facebook App**: `https://app-gerenciador-beta.vercel.app/api/auth/facebook/callback`
+✅ **Modal**: `https://app-gerenciador-pi.vercel.app/api/auth/facebook/callback`
+✅ **Callback**: `https://app-gerenciador-pi.vercel.app/api/auth/facebook/callback`
+✅ **Facebook App**: `https://app-gerenciador-pi.vercel.app/api/auth/facebook/callback`
 
 Todas essas URLs agora estão consistentes após as correções aplicadas.
