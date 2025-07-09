@@ -32,7 +32,7 @@ export function ConectarMetaModal({ open, onOpenChange, cliente }: ConectarMetaM
         return
       }
       
-      const redirectUri = encodeURIComponent(`${window.location.origin}/api/auth/facebook/callback`)
+      const redirectUri = encodeURIComponent(`${process.env.NEXT_PUBLIC_APP_URL}/api/auth/facebook/callback`)
       const scope = encodeURIComponent("ads_management,ads_read,business_management")
       const state = encodeURIComponent(JSON.stringify({ clienteId: cliente?.id }))
 
@@ -43,7 +43,7 @@ export function ConectarMetaModal({ open, onOpenChange, cliente }: ConectarMetaM
 
       // Escutar mensagens do popup
       const handleMessage = (event: MessageEvent) => {
-        if (event.origin !== window.location.origin) return
+        if (event.origin !== process.env.NEXT_PUBLIC_APP_URL) return
 
         if (event.data.type === "FACEBOOK_AUTH_SUCCESS") {
           setConnected(true)
