@@ -15,12 +15,12 @@ export async function GET(request: NextRequest) {
 
   if (error) {
     console.error('Facebook OAuth error:', error)
-    return NextResponse.redirect(`${NEXT_PUBLIC_APP_URL}/dashboard?facebook_auth=error&message=${encodeURIComponent(error)}`)
+    return NextResponse.redirect(`${NEXT_PUBLIC_APP_URL}/dashboard?error=${encodeURIComponent(error)}&platform=meta`)
   }
 
   if (!code || !state) {
     console.error('Missing required parameters:', { code: !!code, state: !!state })
-    return NextResponse.redirect(`${NEXT_PUBLIC_APP_URL}/dashboard?facebook_auth=error&message=${encodeURIComponent('Parâmetros inválidos')}`)
+    return NextResponse.redirect(`${NEXT_PUBLIC_APP_URL}/dashboard?error=${encodeURIComponent('invalid_request')}&platform=meta`)
   }
 
   try {
@@ -91,10 +91,10 @@ export async function GET(request: NextRequest) {
 
     console.log('Facebook authentication successful, redirecting back to app')
     // Redirecionar de volta para a aplicação com sucesso
-    return NextResponse.redirect(`${NEXT_PUBLIC_APP_URL}/dashboard?facebook_auth=success&accounts=${encodeURIComponent(JSON.stringify(accountData.data))}`)
+    return NextResponse.redirect(`${NEXT_PUBLIC_APP_URL}/dashboard?success=true&platform=meta&accounts=${encodeURIComponent(JSON.stringify(accountData.data))}`)
   } catch (error: any) {
     console.error('Facebook authentication error:', error)
     // Redirecionar de volta para a aplicação com erro
-    return NextResponse.redirect(`${NEXT_PUBLIC_APP_URL}/dashboard?facebook_auth=error&message=${encodeURIComponent(error.message)}`)
+    return NextResponse.redirect(`${NEXT_PUBLIC_APP_URL}/dashboard?error=${encodeURIComponent(error.message)}&platform=meta`)
   }
 }
