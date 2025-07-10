@@ -15,6 +15,46 @@ const nextConfig = {
     config.cache = false;
     return config;
   },
+  // Adicionar headers para resolver problemas de CORS com popups OAuth
+  async headers() {
+    return [
+      {
+        source: '/api/auth/google-analytics/callback',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups'
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'unsafe-none'
+          }
+        ]
+      },
+      {
+        source: '/api/auth/facebook/callback',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups'
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'unsafe-none'
+          }
+        ]
+      },
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups'
+          }
+        ]
+      }
+    ]
+  }
 }
 
 export default nextConfig

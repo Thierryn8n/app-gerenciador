@@ -173,144 +173,187 @@ export default function DashboardPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <Card className="bg-neutral-800 border-neutral-700 hover:border-orange-500/50 transition-colors">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-300 tracking-wider">TOTAL CLIENTES</CardTitle>
-            <Users className="h-5 w-5 text-orange-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-white font-mono">{stats.totalClientes}</div>
-            <p className="text-xs text-neutral-500 mt-1">{stats.clientesAtivos} ativos</p>
-          </CardContent>
-        </Card>
+        {/* Card Total Clientes */}
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+          <Card className="relative bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 rounded-xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-cyan-500/10"></div>
+            <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-blue-500/20 backdrop-blur-sm">
+                  <Users className="h-5 w-5 text-blue-400" />
+                </div>
+                <CardTitle className="text-sm font-semibold text-white/90 tracking-wide">TOTAL CLIENTES</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="relative">
+              <div className="text-3xl font-bold text-white mb-2 font-mono tracking-tight">{stats.totalClientes}</div>
+              <div className="flex items-center gap-2">
+                <div className="h-1 w-8 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full"></div>
+                <p className="text-xs text-white/70">{stats.clientesAtivos} ativos</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-        <Card className="bg-neutral-800 border-neutral-700 hover:border-orange-500/50 transition-colors">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-300 tracking-wider">CONTAS CONECTADAS</CardTitle>
-            <TrendingUp className="h-5 w-5 text-orange-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-white font-mono">{stats.contasConectadas}</div>
-            <p className="text-xs text-neutral-500 mt-1">Meta Ads integradas</p>
-          </CardContent>
-        </Card>
+        {/* Card Contas Conectadas */}
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-green-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+          <Card className="relative bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 rounded-xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-green-500/10"></div>
+            <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-emerald-500/20 backdrop-blur-sm">
+                  <TrendingUp className="h-5 w-5 text-emerald-400" />
+                </div>
+                <CardTitle className="text-sm font-semibold text-white/90 tracking-wide">CONTAS CONECTADAS</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="relative">
+              <div className="text-3xl font-bold text-white mb-2 font-mono tracking-tight">{stats.contasConectadas}</div>
+              <div className="flex items-center gap-2">
+                <div className="h-1 w-8 bg-gradient-to-r from-emerald-500 to-green-400 rounded-full"></div>
+                <p className="text-xs text-white/70">Meta Ads integradas</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-        <Card className="bg-neutral-800 border-neutral-700 hover:border-orange-500/50 transition-colors">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-300 tracking-wider">CAMPANHAS ATIVAS</CardTitle>
-            <Target className="h-5 w-5 text-orange-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-white font-mono">{stats.campanhasAtivas}</div>
-            <p className="text-xs text-neutral-500 mt-1">Em execução</p>
-          </CardContent>
-        </Card>
+        {/* Card Campanhas Ativas */}
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-purple-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+          <Card className="relative bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 rounded-xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 via-transparent to-purple-500/10"></div>
+            <CardHeader className="relative flex flex-row items-center justify-between space-y-0 pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-violet-500/20 backdrop-blur-sm">
+                  <Target className="h-5 w-5 text-violet-400" />
+                </div>
+                <CardTitle className="text-sm font-semibold text-white/90 tracking-wide">CAMPANHAS ATIVAS</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="relative">
+              <div className="text-3xl font-bold text-white mb-2 font-mono tracking-tight">{stats.campanhasAtivas}</div>
+              <div className="flex items-center gap-2">
+                <div className="h-1 w-8 bg-gradient-to-r from-violet-500 to-purple-400 rounded-full"></div>
+                <p className="text-xs text-white/70">Em execução</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-        <Card className="bg-neutral-800 border-neutral-700 hover:border-orange-500/50 transition-colors">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-300 tracking-wider">INVESTIMENTO TOTAL</CardTitle>
-            <DollarSign className="h-5 w-5 text-orange-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-white font-mono">
-              R$ {stats.gastoTotal.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+        {/* Card Investimento Total */}
+        <Card className="bg-neutral-800 border-neutral-700">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-neutral-400 tracking-wider">INVESTIMENTO TOTAL</p>
+                <p className="text-2xl font-bold text-white font-mono">R$ {stats.gastoTotal.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
+              </div>
+              <DollarSign className="w-8 h-8 text-amber-500" />
             </div>
-            <p className="text-xs text-neutral-500 mt-1">Últimos 30 dias</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-neutral-800 border-neutral-700 hover:border-orange-500/50 transition-colors">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-300 tracking-wider">CONVERSÕES</CardTitle>
-            <BarChart3 className="h-5 w-5 text-orange-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-white font-mono">{stats.conversoes}</div>
-            <p className="text-xs text-neutral-500 mt-1">Este mês</p>
+        {/* Card Conversões */}
+        <Card className="bg-neutral-800 border-neutral-700">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-neutral-400 tracking-wider">CONVERSÕES</p>
+                <p className="text-2xl font-bold text-white font-mono">{stats.conversoes}</p>
+              </div>
+              <BarChart3 className="w-8 h-8 text-pink-400" />
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-neutral-800 border-neutral-700 hover:border-orange-500/50 transition-colors">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-neutral-300 tracking-wider">PERFORMANCE</CardTitle>
-            <Activity className="h-5 w-5 text-orange-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-white font-mono">94.2%</div>
-            <p className="text-xs text-neutral-500 mt-1">Taxa de sucesso</p>
+        {/* Card Performance */}
+        <Card className="bg-neutral-800 border-neutral-700">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-neutral-400 tracking-wider">PERFORMANCE</p>
+                <p className="text-2xl font-bold text-white font-mono">94.2%</p>
+              </div>
+              <Activity className="w-8 h-8 text-indigo-400" />
+            </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Google Analytics Section */}
-      <div className="mb-8">
-        <Card className="bg-gradient-to-r from-blue-900/20 to-blue-800/20 border-blue-500/30 hover:border-blue-400/50 transition-colors">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-500/20 rounded-lg">
-                  <Globe className="h-6 w-6 text-blue-400" />
-                </div>
-                <div>
-                  <CardTitle className="text-lg font-bold text-white tracking-wider">GOOGLE ANALYTICS</CardTitle>
-                  <p className="text-sm text-blue-300">Métricas de websites dos clientes</p>
-                </div>
-              </div>
-              <Link href="/analytics">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                  Acessar Analytics
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-blue-900/30 p-4 rounded-lg">
-                <div className="flex items-center gap-2 text-blue-300 mb-2">
-                  <TrendingUp className="w-4 h-4" />
-                  <span className="text-sm font-medium">Contas Conectadas</span>
-                </div>
-                <p className="text-2xl font-bold text-white">{stats.contasAnalytics}</p>
-                <p className="text-xs text-blue-400">Propriedades GA4</p>
-              </div>
-              
-              <div className="bg-blue-900/30 p-4 rounded-lg">
-                <div className="flex items-center gap-2 text-blue-300 mb-2">
-                  <Users className="w-4 h-4" />
-                  <span className="text-sm font-medium">Sessões (30d)</span>
-                </div>
-                <p className="text-2xl font-bold text-white">
-                  {stats.sessoesMes.toLocaleString('pt-BR')}
-                </p>
-                <p className="text-xs text-blue-400">Últimos 30 dias</p>
-              </div>
-              
-              <div className="bg-blue-900/30 p-4 rounded-lg">
-                <div className="flex items-center gap-2 text-blue-300 mb-2">
-                  <BarChart3 className="w-4 h-4" />
-                  <span className="text-sm font-medium">Status</span>
-                </div>
-                <p className="text-2xl font-bold text-white">
-                  {stats.contasAnalytics > 0 ? 'Ativo' : 'Inativo'}
-                </p>
-                <p className="text-xs text-blue-400">
-                  {stats.contasAnalytics > 0 ? 'Coletando dados' : 'Conecte uma conta'}
-                </p>
+      <Card className="bg-neutral-800 border-neutral-700 mb-8">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Globe className="w-6 h-6 text-blue-400" />
+              <div>
+                <CardTitle className="text-lg font-bold text-white">Google Analytics</CardTitle>
+                <p className="text-sm text-neutral-400">Métricas de websites dos clientes</p>
               </div>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+            <Link href="/analytics">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white border-0">
+                Acessar Analytics
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Contas Conectadas */}
+            <div className="p-4 rounded-lg bg-neutral-700 border border-neutral-600">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs text-neutral-400 tracking-wider">Contas Conectadas</p>
+                <TrendingUp className="w-4 h-4 text-emerald-400" />
+              </div>
+              <p className="text-xl font-bold text-white font-mono">{stats.contasAnalytics}</p>
+              <p className="text-xs text-neutral-500">Propriedades GA4</p>
+            </div>
+
+            {/* Sessões */}
+            <div className="p-4 rounded-lg bg-neutral-700 border border-neutral-600">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs text-neutral-400 tracking-wider">Sessões (30d)</p>
+                <Users className="w-4 h-4 text-violet-400" />
+              </div>
+              <p className="text-xl font-bold text-white font-mono">
+                {stats.sessoesMes.toLocaleString('pt-BR')}
+              </p>
+              <p className="text-xs text-neutral-500">Últimos 30 dias</p>
+            </div>
+
+            {/* Status */}
+            <div className="p-4 rounded-lg bg-neutral-700 border border-neutral-600">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs text-neutral-400 tracking-wider">Status</p>
+                <BarChart3 className="w-4 h-4 text-amber-400" />
+              </div>
+              <p className="text-xl font-bold text-white font-mono">
+                {stats.contasAnalytics > 0 ? 'Ativo' : 'Inativo'}
+              </p>
+              <p className="text-xs text-neutral-500">
+                {stats.contasAnalytics > 0 ? 'Coletando dados' : 'Conecte uma conta'}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Activity Feed */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Atividade Recente */}
         <Card className="bg-neutral-800 border-neutral-700">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-neutral-300 tracking-wider">ATIVIDADE RECENTE</CardTitle>
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <Activity className="w-5 h-5 text-slate-400" />
+              <CardTitle className="text-lg font-bold text-white">Atividade Recente</CardTitle>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {[
                 {
                   time: "2 min atrás",
@@ -330,33 +373,15 @@ export default function DashboardPage() {
                   client: "Cliente DEF",
                   status: "success",
                 },
-                {
-                  time: "2 horas atrás",
-                  action: "Relatório gerado",
-                  client: "Cliente GHI",
-                  status: "info",
-                },
               ].map((activity, index) => (
-                <div
-                  key={index}
-                  className="flex items-start gap-3 p-3 bg-neutral-900 rounded border-l-2 border-orange-500"
-                >
-                  <div
-                    className={`w-2 h-2 rounded-full mt-2 ${
-                      activity.status === "success"
-                        ? "bg-green-500"
-                        : activity.status === "warning"
-                          ? "bg-yellow-500"
-                          : activity.status === "error"
-                            ? "bg-red-500"
-                            : "bg-blue-500"
-                    }`}
-                  ></div>
+                <div key={index} className="flex items-center gap-3 p-3 rounded-lg bg-neutral-700 border border-neutral-600">
+                  <div className={`w-2 h-2 rounded-full ${
+                    activity.status === "success" ? "bg-green-400" :
+                    activity.status === "warning" ? "bg-yellow-400" : "bg-blue-400"
+                  }`}></div>
                   <div className="flex-1">
-                    <p className="text-sm text-white">{activity.action}</p>
-                    <p className="text-xs text-neutral-400">
-                      {activity.client} • {activity.time}
-                    </p>
+                    <p className="text-sm text-white font-medium">{activity.action}</p>
+                    <p className="text-xs text-neutral-400">{activity.client} • {activity.time}</p>
                   </div>
                 </div>
               ))}
@@ -364,54 +389,17 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
+        {/* Performance Chart */}
         <Card className="bg-neutral-800 border-neutral-700">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-neutral-300 tracking-wider">PERFORMANCE CHART</CardTitle>
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <BarChart3 className="w-5 h-5 text-indigo-400" />
+              <CardTitle className="text-lg font-bold text-white">Performance Chart</CardTitle>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="h-48 relative">
-              {/* Chart Grid */}
-              <div className="absolute inset-0 grid grid-cols-7 grid-rows-6 opacity-20">
-                {Array.from({ length: 42 }).map((_, i) => (
-                  <div key={i} className="border border-neutral-700"></div>
-                ))}
-              </div>
-
-              {/* Chart Line */}
-              <svg className="absolute inset-0 w-full h-full">
-                <polyline
-                  points="0,120 50,100 100,110 150,90 200,95 250,85 300,100 350,80"
-                  fill="none"
-                  stroke="#f97316"
-                  strokeWidth="3"
-                />
-                <polyline
-                  points="0,140 50,135 100,130 150,125 200,130 250,135 300,125 350,120"
-                  fill="none"
-                  stroke="#ffffff"
-                  strokeWidth="2"
-                  strokeDasharray="5,5"
-                />
-              </svg>
-
-              {/* Y-axis labels */}
-              <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-neutral-500 -ml-8 font-mono">
-                <span>R$ 10k</span>
-                <span>R$ 7.5k</span>
-                <span>R$ 5k</span>
-                <span>R$ 2.5k</span>
-                <span>R$ 0</span>
-              </div>
-
-              {/* X-axis labels */}
-              <div className="absolute bottom-0 left-0 w-full flex justify-between text-xs text-neutral-500 -mb-6 font-mono">
-                <span>Jan</span>
-                <span>Fev</span>
-                <span>Mar</span>
-                <span>Abr</span>
-                <span>Mai</span>
-                <span>Jun</span>
-              </div>
+            <div className="h-48 bg-neutral-700 rounded-lg border border-neutral-600 flex items-center justify-center">
+              <p className="text-neutral-400 text-sm">Gráfico de performance será exibido aqui</p>
             </div>
           </CardContent>
         </Card>

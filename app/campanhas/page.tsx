@@ -521,78 +521,138 @@ export default function CampanhasPage() {
           </Card>
 
           {/* Estatísticas das Campanhas Filtradas */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-            <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 border-orange-500/20">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-orange-400 font-medium">TOTAL</p>
-                    <p className="text-xl font-bold text-white">{estatisticas.total}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+            {/* Card Total */}
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+              <Card className="relative bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 rounded-xl overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-transparent to-red-500/10"></div>
+                <CardContent className="relative p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="p-1.5 rounded-lg bg-orange-500/20 backdrop-blur-sm">
+                          <BarChart3 className="w-4 h-4 text-orange-400" />
+                        </div>
+                        <p className="text-xs text-white/90 font-semibold tracking-wide">TOTAL</p>
+                      </div>
+                      <p className="text-2xl font-bold text-white font-mono tracking-tight">{estatisticas.total}</p>
+                      <div className="h-0.5 w-6 bg-gradient-to-r from-orange-500 to-red-400 rounded-full mt-1"></div>
+                    </div>
                   </div>
-                  <BarChart3 className="w-6 h-6 text-orange-500" />
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
 
-            <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-green-400 font-medium">ATIVAS</p>
-                    <p className="text-xl font-bold text-white">{estatisticas.ativas}</p>
+            {/* Card Ativas */}
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-green-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+              <Card className="relative bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 rounded-xl overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-green-500/10"></div>
+                <CardContent className="relative p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="p-1.5 rounded-lg bg-emerald-500/20 backdrop-blur-sm">
+                          <TrendingUp className="w-4 h-4 text-emerald-400" />
+                        </div>
+                        <p className="text-xs text-white/90 font-semibold tracking-wide">ATIVAS</p>
+                      </div>
+                      <p className="text-2xl font-bold text-white font-mono tracking-tight">{estatisticas.ativas}</p>
+                      <div className="h-0.5 w-6 bg-gradient-to-r from-emerald-500 to-green-400 rounded-full mt-1"></div>
+                    </div>
                   </div>
-                  <TrendingUp className="w-6 h-6 text-green-500" />
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
 
-            <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-blue-400 font-medium">GASTO</p>
-                    <p className="text-lg font-bold text-white">{formatCurrency(estatisticas.totalGasto)}</p>
+            {/* Card Gasto */}
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+              <Card className="relative bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 rounded-xl overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-cyan-500/10"></div>
+                <CardContent className="relative p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="p-1.5 rounded-lg bg-blue-500/20 backdrop-blur-sm">
+                          <DollarSign className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <p className="text-xs text-white/90 font-semibold tracking-wide">GASTO</p>
+                      </div>
+                      <p className="text-xl font-bold text-white font-mono tracking-tight">{formatCurrency(estatisticas.totalGasto)}</p>
+                      <div className="h-0.5 w-6 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full mt-1"></div>
+                    </div>
                   </div>
-                  <DollarSign className="w-6 h-6 text-blue-500" />
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
 
-            <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-purple-400 font-medium">CLIQUES</p>
-                    <p className="text-lg font-bold text-white">{formatNumber(estatisticas.totalCliques)}</p>
+            {/* Card Cliques */}
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-purple-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+              <Card className="relative bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 rounded-xl overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 via-transparent to-purple-500/10"></div>
+                <CardContent className="relative p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="p-1.5 rounded-lg bg-violet-500/20 backdrop-blur-sm">
+                          <MousePointer className="w-4 h-4 text-violet-400" />
+                        </div>
+                        <p className="text-xs text-white/90 font-semibold tracking-wide">CLIQUES</p>
+                      </div>
+                      <p className="text-xl font-bold text-white font-mono tracking-tight">{formatNumber(estatisticas.totalCliques)}</p>
+                      <div className="h-0.5 w-6 bg-gradient-to-r from-violet-500 to-purple-400 rounded-full mt-1"></div>
+                    </div>
                   </div>
-                  <MousePointer className="w-6 h-6 text-purple-500" />
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
 
-            <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 border-yellow-500/20">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-yellow-400 font-medium">IMPRESSÕES</p>
-                    <p className="text-lg font-bold text-white">{formatNumber(estatisticas.totalImpressoes)}</p>
+            {/* Card Impressões */}
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-600 to-yellow-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+              <Card className="relative bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 rounded-xl overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-yellow-500/10"></div>
+                <CardContent className="relative p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="p-1.5 rounded-lg bg-amber-500/20 backdrop-blur-sm">
+                          <Eye className="w-4 h-4 text-amber-400" />
+                        </div>
+                        <p className="text-xs text-white/90 font-semibold tracking-wide">IMPRESSÕES</p>
+                      </div>
+                      <p className="text-xl font-bold text-white font-mono tracking-tight">{formatNumber(estatisticas.totalImpressoes)}</p>
+                      <div className="h-0.5 w-6 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full mt-1"></div>
+                    </div>
                   </div>
-                  <Eye className="w-6 h-6 text-yellow-500" />
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
 
-            <Card className="bg-gradient-to-br from-pink-500/10 to-pink-600/5 border-pink-500/20">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-pink-400 font-medium">CTR MÉDIO</p>
-                    <p className="text-lg font-bold text-white">{estatisticas.ctrMedio.toFixed(2)}%</p>
+            {/* Card CTR Médio */}
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-rose-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+              <Card className="relative bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 rounded-xl overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-rose-500/10"></div>
+                <CardContent className="relative p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="p-1.5 rounded-lg bg-pink-500/20 backdrop-blur-sm">
+                          <Target className="w-4 h-4 text-pink-400" />
+                        </div>
+                        <p className="text-xs text-white/90 font-semibold tracking-wide">CTR MÉDIO</p>
+                      </div>
+                      <p className="text-xl font-bold text-white font-mono tracking-tight">{estatisticas.ctrMedio.toFixed(2)}%</p>
+                      <div className="h-0.5 w-6 bg-gradient-to-r from-pink-500 to-rose-400 rounded-full mt-1"></div>
+                    </div>
                   </div>
-                  <Target className="w-6 h-6 text-pink-500" />
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
           {/* Lista de Campanhas */}

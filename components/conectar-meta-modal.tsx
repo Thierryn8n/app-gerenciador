@@ -60,10 +60,15 @@ export function ConectarMetaModal({ open, onOpenChange, cliente }: ConectarMetaM
 
       // Verificar se o popup foi fechado manualmente
       const checkClosed = setInterval(() => {
-        if (popup?.closed) {
-          clearInterval(checkClosed)
-          window.removeEventListener("message", handleMessage)
-          setLoading(false)
+        try {
+          if (popup?.closed) {
+            clearInterval(checkClosed)
+            window.removeEventListener("message", handleMessage)
+            setLoading(false)
+          }
+        } catch (error) {
+          // Ignorar erros de Cross-Origin-Opener-Policy
+          console.log('Popup check blocked by CORS policy')
         }
       }, 1000)
     } catch (error) {

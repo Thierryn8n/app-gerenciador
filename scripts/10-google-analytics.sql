@@ -1,16 +1,3 @@
--- Criar tabela de tokens Google Analytics
-CREATE TABLE IF NOT EXISTS tokens_google_analytics (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  conta_analytics_id UUID REFERENCES contas_analytics(id) ON DELETE CASCADE,
-  access_token TEXT NOT NULL,
-  refresh_token TEXT NOT NULL,
-  token_type VARCHAR(50) DEFAULT 'Bearer',
-  expires_at TIMESTAMP WITH TIME ZONE,
-  scope TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
 -- Criar tabela de contas Google Analytics
 CREATE TABLE IF NOT EXISTS contas_analytics (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -22,6 +9,19 @@ CREATE TABLE IF NOT EXISTS contas_analytics (
   nome_propriedade VARCHAR(255) NOT NULL,
   url_site VARCHAR(500),
   status VARCHAR(50) DEFAULT 'ativa' CHECK (status IN ('ativa', 'inativa', 'erro')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Criar tabela de tokens Google Analytics
+CREATE TABLE IF NOT EXISTS tokens_google_analytics (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  conta_analytics_id UUID REFERENCES contas_analytics(id) ON DELETE CASCADE,
+  access_token TEXT NOT NULL,
+  refresh_token TEXT NOT NULL,
+  token_type VARCHAR(50) DEFAULT 'Bearer',
+  expires_at TIMESTAMP WITH TIME ZONE,
+  scope TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

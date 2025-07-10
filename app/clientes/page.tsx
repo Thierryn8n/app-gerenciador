@@ -111,43 +111,73 @@ export default function ClientesPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-neutral-800 border-neutral-700">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-neutral-400 tracking-wider">TOTAL CLIENTES</p>
-                <p className="text-2xl font-bold text-white font-mono">{clientes.length}</p>
+        {/* Card Total Clientes */}
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+          <Card className="relative bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 rounded-xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-cyan-500/10"></div>
+            <CardContent className="relative p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-white/70 tracking-wider font-medium">TOTAL CLIENTES</p>
+                  <p className="text-2xl font-bold text-white font-mono tracking-tight">{clientes.length}</p>
+                </div>
+                <div className="p-2 rounded-lg bg-blue-500/20 backdrop-blur-sm">
+                  <Users className="w-8 h-8 text-blue-400" />
+                </div>
               </div>
-              <Users className="w-8 h-8 text-orange-500" />
-            </div>
-          </CardContent>
-        </Card>
+              <div className="mt-2">
+                <div className="h-1 w-12 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full"></div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-        <Card className="bg-neutral-800 border-neutral-700">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-neutral-400 tracking-wider">CLIENTES ATIVOS</p>
-                <p className="text-2xl font-bold text-green-400 font-mono">
-                  {clientes.filter((c) => c.status === "ativo").length}
-                </p>
+        {/* Card Clientes Ativos */}
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-green-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+          <Card className="relative bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 rounded-xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-green-500/10"></div>
+            <CardContent className="relative p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-white/70 tracking-wider font-medium">CLIENTES ATIVOS</p>
+                  <p className="text-2xl font-bold text-white font-mono tracking-tight">
+                    {clientes.filter((c) => c.status === "ativo").length}
+                  </p>
+                </div>
+                <div className="p-2 rounded-lg bg-emerald-500/20 backdrop-blur-sm">
+                  <TrendingUp className="w-8 h-8 text-emerald-400" />
+                </div>
               </div>
-              <TrendingUp className="w-8 h-8 text-green-400" />
-            </div>
-          </CardContent>
-        </Card>
+              <div className="mt-2">
+                <div className="h-1 w-12 bg-gradient-to-r from-emerald-500 to-green-400 rounded-full"></div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-        <Card className="bg-neutral-800 border-neutral-700">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-neutral-400 tracking-wider">CONTAS CONECTADAS</p>
-                <p className="text-2xl font-bold text-blue-400 font-mono">0</p>
+        {/* Card Contas Conectadas */}
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-purple-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+          <Card className="relative bg-black/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 rounded-xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 via-transparent to-purple-500/10"></div>
+            <CardContent className="relative p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-white/70 tracking-wider font-medium">CONTAS CONECTADAS</p>
+                  <p className="text-2xl font-bold text-white font-mono tracking-tight">0</p>
+                </div>
+                <div className="p-2 rounded-lg bg-violet-500/20 backdrop-blur-sm">
+                  <Facebook className="w-8 h-8 text-violet-400" />
+                </div>
               </div>
-              <Facebook className="w-8 h-8 text-blue-400" />
-            </div>
-          </CardContent>
-        </Card>
+              <div className="mt-2">
+                <div className="h-1 w-12 bg-gradient-to-r from-violet-500 to-purple-400 rounded-full"></div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       {/* Search */}
