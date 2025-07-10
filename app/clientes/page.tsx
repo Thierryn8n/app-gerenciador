@@ -331,23 +331,24 @@ export default function ClientesPage() {
                   </div>
                 )}
 
-                {/* Ações Rápidas */}
-                <div className="flex gap-2 pt-2 border-t border-neutral-700/50">
+                {/* Botão Toggle em Destaque */}
+                <div className="flex justify-center pt-2 border-t border-neutral-700/50">
                   <Button
                     size="sm"
-                    variant="outline"
-                    onClick={() => router.push(`/clientes/${cliente.id}/metricas`)}
-                    className="flex-1 border-neutral-600 text-neutral-300 hover:bg-neutral-700 bg-transparent text-xs"
+                    onClick={() => toggleCardExpansion(cliente.id)}
+                    className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-2 rounded-lg transition-all duration-200 shadow-lg hover:shadow-orange-500/25"
                   >
-                    <Eye className="w-3 h-3 mr-1" />
-                    Visualizar
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="border-neutral-600 text-neutral-300 hover:bg-neutral-700 bg-transparent"
-                  >
-                    <Settings className="w-3 h-3" />
+                    {expandedCards[cliente.id] ? (
+                      <>
+                        <ChevronUp className="w-4 h-4 mr-2" />
+                        Recolher
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown className="w-4 h-4 mr-2" />
+                        Ver Mais
+                      </>
+                    )}
                   </Button>
                 </div>
               </CardContent>
