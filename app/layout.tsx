@@ -5,6 +5,7 @@ import "./globals.css"
 import { AuthProvider } from "@/contexts/auth-context"
 import { ClientFacebookWrapper } from "@/components/client-facebook-wrapper"
 import { LayoutWrapper } from "@/components/layout-wrapper"
+import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -26,6 +27,7 @@ export default function RootLayout({
         <AuthProvider>
           <LayoutWrapper>{children}</LayoutWrapper>
         </AuthProvider>
+        <Toaster />
       </body>
     </html>
   )

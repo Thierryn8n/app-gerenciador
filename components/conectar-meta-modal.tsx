@@ -38,42 +38,11 @@ export function ConectarMetaModal({ open, onOpenChange, cliente }: ConectarMetaM
 
       const authUrl = `https://www.facebook.com/v18.0/dialog/oauth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code&state=${state}`
 
-      // Abrir popup para autenticação
-      const popup = window.open(authUrl, "facebook-auth", "width=600,height=600,scrollbars=yes,resizable=yes")
-
-      // Escutar mensagens do popup
-      const handleMessage = (event: MessageEvent) => {
-        if (event.origin !== process.env.NEXT_PUBLIC_APP_URL) return
-
-        if (event.data.type === "FACEBOOK_AUTH_SUCCESS") {
-          setConnected(true)
-          popup?.close()
-          window.removeEventListener("message", handleMessage)
-        } else if (event.data.type === "FACEBOOK_AUTH_ERROR") {
-          console.error("Erro na autenticação:", event.data.error)
-          popup?.close()
-          window.removeEventListener("message", handleMessage)
-        }
-      }
-
-      window.addEventListener("message", handleMessage)
-
-      // Verificar se o popup foi fechado manualmente
-      const checkClosed = setInterval(() => {
-        try {
-          if (popup?.closed) {
-            clearInterval(checkClosed)
-            window.removeEventListener("message", handleMessage)
-            setLoading(false)
-          }
-        } catch (error) {
-          // Ignorar erros de Cross-Origin-Opener-Policy
-          console.log('Popup check blocked by CORS policy')
-        }
-      }, 1000)
+      // Redirecionar diretamente na mesma janela em vez de usar popup
+      // Isso elimina problemas de comunicação entre janelas e CORS
+      window.location.href = authUrl
     } catch (error) {
       console.error("Erro ao conectar com Meta:", error)
-    } finally {
       setLoading(false)
     }
   }

@@ -15,44 +15,12 @@ export async function GET(request: NextRequest) {
 
   if (error) {
     console.error('Facebook OAuth error:', error)
-    return new NextResponse(
-      `
-      <script>
-        console.log('Sending error message to parent');
-        if (window.opener) {
-          window.opener.postMessage({
-            type: 'FACEBOOK_AUTH_ERROR',
-            error: '${error}'
-          }, '${NEXT_PUBLIC_APP_URL}');
-        }
-        window.close();
-      </script>
-    `,
-      {
-        headers: { "Content-Type": "text/html" },
-      },
-    )
+    return NextResponse.redirect(`${NEXT_PUBLIC_APP_URL}/dashboard?facebook_auth=error&message=${encodeURIComponent(error)}`)
   }
 
   if (!code || !state) {
     console.error('Missing required parameters:', { code: !!code, state: !!state })
-    return new NextResponse(
-      `
-      <script>
-        console.log('Missing parameters, sending error to parent');
-        if (window.opener) {
-          window.opener.postMessage({
-            type: 'FACEBOOK_AUTH_ERROR',
-            error: 'Parâmetros inválidos'
-          }, '${NEXT_PUBLIC_APP_URL}');
-        }
-        window.close();
-      </script>
-    `,
-      {
-        headers: { "Content-Type": "text/html" },
-      },
-    )
+    return NextResponse.redirect(`${NEXT_PUBLIC_APP_URL}/dashboard?facebook_auth=error&message=${encodeURIComponent('Parâmetros inválidos')}`)
   }
 
   try {
@@ -121,46 +89,12 @@ export async function GET(request: NextRequest) {
       if (tokenError) throw tokenError
     }
 
-    console.log('Authentication successful, sending success message')
-    return new NextResponse(
-      `
-      <script>
-        console.log('Sending success message to parent');
-        if (window.opener) {
-          window.opener.postMessage({
-            type: 'FACEBOOK_AUTH_SUCCESS',
-            accounts: ${JSON.stringify(accountData.data)}
-          }, '${NEXT_PUBLIC_APP_URL}');
-        }
-        setTimeout(() => {
-          window.close();
-        }, 1000);
-      </script>
-    `,
-      {
-        headers: { "Content-Type": "text/html" },
-      },
-    )
+    console.log('Facebook authentication successful, redirecting back to app')
+    // Redirecionar de volta para a aplicação com sucesso
+    return NextResponse.redirect(`${NEXT_PUBLIC_APP_URL}/dashboard?facebook_auth=success&accounts=${encodeURIComponent(JSON.stringify(accountData.data))}`)
   } catch (error: any) {
     console.error('Facebook authentication error:', error)
-    return new NextResponse(
-      `
-      <script>
-        console.log('Sending error message to parent:', '${error.message}');
-        if (window.opener) {
-          window.opener.postMessage({
-            type: 'FACEBOOK_AUTH_ERROR',
-            error: '${error.message}'
-          }, '${NEXT_PUBLIC_APP_URL}');
-        }
-        setTimeout(() => {
-          window.close();
-        }, 1000);
-      </script>
-    `,
-      {
-        headers: { "Content-Type": "text/html" },
-      },
-    )
+    // Redirecionar de volta para a aplicação com erro
+    return NextResponse.redirect(`${NEXT_PUBLIC_APP_URL}/dashboard?facebook_auth=error&message=${encodeURIComponent(error.message)}`)
   }
 }

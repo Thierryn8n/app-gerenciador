@@ -2,15 +2,19 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/contexts/auth-context"
 import { supabase } from "@/lib/supabase"
 import { OnboardingWizard } from "@/components/onboarding-wizard"
-import { Users, TrendingUp, DollarSign, Target, Activity, BarChart3, Globe, ArrowRight } from "lucide-react"
+import { Users, TrendingUp, DollarSign, Target, Activity, BarChart3, Globe, ArrowRight, CheckCircle, XCircle } from "lucide-react"
+import { toast } from "sonner"
 
 export default function DashboardPage() {
   const { usuario } = useAuth()
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [stats, setStats] = useState({
     totalClientes: 0,
     clientesAtivos: 0,
@@ -34,6 +38,51 @@ export default function DashboardPage() {
       console.log('❌ Usuário não encontrado')
     }
   }, [usuario])
+
+  // Verificar parâmetros de retorno da autenticação
+  useEffect(() => {
+    const success = searchParams.get('success')
+    const error = searchParams.get('error')
+    const platform = searchParams.get('platform')
+    
+    if (success === 'true' && platform) {
+      const platformName = platform === 'google-analytics' ? 'Google Analytics' : 'Meta/Facebook'
+      toast.success(`${platformName} conectado com sucesso!`, {
+        description: 'Sua conta foi conectada e está pronta para uso.',
+        duration: 5000,
+      })
+      // Limpar parâmetros da URL
+      router.replace('/dashboard', { scroll: false })
+      // Recarregar stats para mostrar nova conta conectada
+      if (usuario) {
+        fetchStats()
+      }
+    } else if (error && platform) {
+      const platformName = platform === 'google-analytics' ? 'Google Analytics' : 'Meta/Facebook'
+      let errorMessage = 'Erro desconhecido'
+      
+      switch (error) {
+        case 'access_denied':
+          errorMessage = 'Acesso negado pelo usuário'
+          break
+        case 'invalid_request':
+          errorMessage = 'Requisição inválida'
+          break
+        case 'server_error':
+          errorMessage = 'Erro interno do servidor'
+          break
+        default:
+          errorMessage = error.replace(/_/g, ' ')
+      }
+      
+      toast.error(`Erro ao conectar ${platformName}`, {
+        description: errorMessage,
+        duration: 7000,
+      })
+      // Limpar parâmetros da URL
+      router.replace('/dashboard', { scroll: false })
+    }
+  }, [searchParams, router, usuario])
 
   const checkOnboardingStatus = async () => {
     console.log('🔍 Verificando status do onboarding para usuário:', usuario?.id)

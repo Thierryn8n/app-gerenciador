@@ -38,72 +38,11 @@ export function ConectarGoogleAnalyticsModal({ open, onOpenChange, cliente }: Co
 
       const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code&state=${state}&access_type=offline&prompt=consent`
 
-      // Abrir popup para autenticação
-      const popup = window.open(authUrl, "google-analytics-auth", "width=600,height=600,scrollbars=yes,resizable=yes")
-
-      // Variáveis para controle do popup
-      let popupCheckInterval: NodeJS.Timeout
-      let popupCheckTimeout: NodeJS.Timeout
-      
-      const cleanupPopupCheck = () => {
-        if (popupCheckInterval) clearInterval(popupCheckInterval)
-        if (popupCheckTimeout) clearTimeout(popupCheckTimeout)
-        window.removeEventListener("message", handleMessage)
-        setLoading(false)
-      }
-
-      // Escutar mensagens do popup
-      const handleMessage = (event: MessageEvent) => {
-        if (event.origin !== process.env.NEXT_PUBLIC_APP_URL) return
-
-        if (event.data.type === "GOOGLE_ANALYTICS_AUTH_SUCCESS") {
-          console.log('Google Analytics authentication successful')
-          setConnected(true)
-          try {
-            popup?.close()
-          } catch (error) {
-            console.log('Could not close popup due to CORS policy')
-          }
-          cleanupPopupCheck()
-        } else if (event.data.type === "GOOGLE_ANALYTICS_AUTH_ERROR") {
-          console.error("Erro na autenticação:", event.data.error)
-          try {
-            popup?.close()
-          } catch (error) {
-            console.log('Could not close popup due to CORS policy')
-          }
-          cleanupPopupCheck()
-        }
-      }
-
-      window.addEventListener("message", handleMessage)
-
-      // Verificar se o popup foi fechado manualmente
-      // Usar uma abordagem mais robusta para detectar fechamento do popup
-      
-      // Timeout de segurança para limpar após 5 minutos
-      popupCheckTimeout = setTimeout(() => {
-        console.log('Popup authentication timeout')
-        cleanupPopupCheck()
-      }, 300000) // 5 minutos
-      
-      // Verificação periódica mais segura
-      popupCheckInterval = setInterval(() => {
-        try {
-          // Tentar acessar a propriedade closed de forma segura
-          if (popup && popup.closed) {
-            console.log('Popup was closed manually')
-            cleanupPopupCheck()
-          }
-        } catch (error) {
-          // Se não conseguir acessar popup.closed devido ao CORS,
-          // continuar verificando até receber uma mensagem ou timeout
-          console.log('Popup check blocked by CORS policy, continuing...')
-        }
-      }, 2000) // Verificar a cada 2 segundos em vez de 1
+      // Redirecionar diretamente na mesma janela em vez de usar popup
+      // Isso elimina problemas de comunicação entre janelas e CORS
+      window.location.href = authUrl
     } catch (error) {
       console.error("Erro ao conectar com Google Analytics:", error)
-    } finally {
       setLoading(false)
     }
   }
