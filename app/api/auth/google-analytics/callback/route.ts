@@ -25,8 +25,25 @@ export async function GET(request: NextRequest) {
 
   try {
     console.log('Parsing state:', state)
-    const { clienteId } = JSON.parse(decodeURIComponent(state))
-    console.log('Cliente ID:', clienteId)
+    console.log('Decoded state:', decodeURIComponent(state))
+    
+    let clienteId
+    try {
+      const decodedState = decodeURIComponent(state)
+      console.log('Attempting to parse JSON:', decodedState)
+      const parsedState = JSON.parse(decodedState)
+      clienteId = parsedState.clienteId
+      console.log('Cliente ID:', clienteId)
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError)
+      console.error('Raw state value:', state)
+      console.error('Decoded state value:', decodeURIComponent(state))
+      throw new Error(`Invalid state parameter: ${parseError.message}`)
+    }
+    
+    if (!clienteId) {
+      throw new Error('Cliente ID not found in state parameter')
+    }
 
     // Trocar código por access token
     console.log('Exchanging code for access token...')
