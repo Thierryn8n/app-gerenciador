@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/contexts/auth-context"
 import { supabase, type Cliente } from "@/lib/supabase"
-import { Plus, Search, Users, TrendingUp, Eye, Settings, MapPin, Clock, Facebook, BarChart3, Globe, ChevronDown, ChevronUp, MoreHorizontal } from "lucide-react"
+import { Plus, Search, Users, TrendingUp, Eye, Settings, MapPin, Clock, Facebook, BarChart3, Globe, ChevronDown, ChevronUp } from "lucide-react"
 import { AdicionarClienteModal } from "@/components/adicionar-cliente-modal"
 import { ConectarMetaModal } from "@/components/conectar-meta-modal"
 import { ConectarGoogleAnalyticsModal } from "@/components/conectar-google-analytics-modal"
@@ -23,7 +23,6 @@ export default function ClientesPage() {
   const [showConectarAnalytics, setShowConectarAnalytics] = useState(false)
   const [clienteSelecionado, setClienteSelecionado] = useState<Cliente | null>(null)
   const [expandedCards, setExpandedCards] = useState({})
-  const [showMoreActions, setShowMoreActions] = useState({})
   const router = useRouter()
 
   useEffect(() => {
@@ -81,13 +80,6 @@ export default function ClientesPage() {
 
   const toggleCardExpansion = (clienteId: string) => {
     setExpandedCards(prev => ({
-      ...prev,
-      [clienteId]: !prev[clienteId]
-    }))
-  }
-
-  const toggleMoreActions = (clienteId: string) => {
-    setShowMoreActions(prev => ({
       ...prev,
       [clienteId]: !prev[clienteId]
     }))
@@ -269,7 +261,7 @@ export default function ClientesPage() {
               </CardHeader>
               
               <CardContent className="space-y-4">
-                {/* Informações Básicas - Sempre Visível */}
+                {/* Informações do Cliente */}
                 <div className="bg-neutral-900/50 rounded-lg p-3 border border-neutral-700/50">
                   <div className="flex items-center gap-2 mb-2">
                     <Clock className="w-4 h-4 text-neutral-500" />
@@ -280,34 +272,14 @@ export default function ClientesPage() {
                   </p>
                 </div>
 
-                {/* Ações Rápidas - Sempre Visível */}
-                <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    onClick={() => router.push(`/clientes/${cliente.id}/metricas`)}
-                    className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-xs"
-                  >
-                    <Eye className="w-3 h-3 mr-1" />
-                    Visualizar
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => toggleMoreActions(cliente.id)}
-                    className="border-neutral-600 text-neutral-300 hover:bg-neutral-700 bg-transparent"
-                  >
-                    <MoreHorizontal className="w-4 h-4" />
-                  </Button>
-                </div>
-
                 {/* Seções Expansíveis */}
                 {expandedCards[cliente.id] && (
                   <div className="space-y-4 animate-in slide-in-from-top-2 duration-200">
-                    {/* Seção de Análises */}
+                    {/* Seção de Métricas */}
                     <div>
                       <div className="flex items-center gap-2 mb-3">
                         <BarChart3 className="w-4 h-4 text-orange-500" />
-                        <span className="text-xs text-neutral-400 tracking-wider font-medium">ANÁLISES DETALHADAS</span>
+                        <span className="text-xs text-neutral-400 tracking-wider font-medium">ANÁLISES</span>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <Button
@@ -333,7 +305,7 @@ export default function ClientesPage() {
                     <div>
                       <div className="flex items-center gap-2 mb-3">
                         <Settings className="w-4 h-4 text-blue-500" />
-                        <span className="text-xs text-neutral-400 tracking-wider font-medium">GERENCIAR CONEXÕES</span>
+                        <span className="text-xs text-neutral-400 tracking-wider font-medium">CONEXÕES</span>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <Button
@@ -359,41 +331,25 @@ export default function ClientesPage() {
                   </div>
                 )}
 
-                {/* Ações Adicionais */}
-                {showMoreActions[cliente.id] && (
-                  <div className="space-y-2 pt-2 border-t border-neutral-700/50 animate-in slide-in-from-top-2 duration-200">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Settings className="w-4 h-4 text-violet-500" />
-                      <span className="text-xs text-neutral-400 tracking-wider font-medium">AÇÕES AVANÇADAS</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="border-violet-600/50 text-violet-400 hover:bg-violet-600/10 hover:border-violet-500 text-xs"
-                      >
-                        <Settings className="w-3 h-3 mr-1" />
-                        Configurar
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="border-red-600/50 text-red-400 hover:bg-red-600/10 hover:border-red-500 text-xs"
-                      >
-                        <BarChart3 className="w-3 h-3 mr-1" />
-                        Relatórios
-                      </Button>
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="w-full border-yellow-600/50 text-yellow-400 hover:bg-yellow-600/10 hover:border-yellow-500 text-xs"
-                    >
-                      <Globe className="w-3 h-3 mr-1" />
-                      Exportar Dados
-                    </Button>
-                  </div>
-                )}
+                {/* Ações Rápidas */}
+                <div className="flex gap-2 pt-2 border-t border-neutral-700/50">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => router.push(`/clientes/${cliente.id}/metricas`)}
+                    className="flex-1 border-neutral-600 text-neutral-300 hover:bg-neutral-700 bg-transparent text-xs"
+                  >
+                    <Eye className="w-3 h-3 mr-1" />
+                    Visualizar
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-neutral-600 text-neutral-300 hover:bg-neutral-700 bg-transparent"
+                  >
+                    <Settings className="w-3 h-3" />
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))}
